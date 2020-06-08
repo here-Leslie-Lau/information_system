@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="leslie.information_system.mapper.SubjectMapper">
+
+    <resultMap id="subjectMapper" type="leslie.information_system.entity.Subject">
+        <id property="subject_id" column="subject_id"></id>
+        <result property="subject_name" column="subject_name"></result>
+
+        <association property="department" column="department_id" javaType="leslie.information_system.entity.Department" select="leslie.information_system.mapper.DepartmentMapper.getDepartmentByDepartment_id">
+            <id property="department_id" column="department_id"></id>
+            <result property="department_name" column="department_name"></result>
+        </association>
+    </resultMap>
+    
+    <select id="getAllSubject" resultMap="subjectMapper">
+        select * from subjects
+    </select>
+
+    <select id="getSubjectByDepartment_id" resultMap="subjectMapper">
+        select * from subjects where department_id = #{department_id}
+    </select>
+
+    <select id="getSubjectBySubject_id" resultMap="subjectMapper">
+        select * from subjects where subject_id = #{subject_id}
+    </select>
+
+    <insert id="addSubject" parameterType="leslie.information_system.entity.Subject">
+        insert into subjects (subject_name,department_id) values (#{subject_name},#{department.department_id})
+    </insert>
+
+    <delete id="deleteSubject" parameterType="Integer">
+        delete from subjects where subject_id = #{subject_id}
+    </delete>
+
+    <update id="updateSubject" parameterType="leslie.information_system.entity.Subject">
+        update subjects set subject_name = #{subject_name} where subject_id = #{subject_id}
+    </update>
+</mapper>

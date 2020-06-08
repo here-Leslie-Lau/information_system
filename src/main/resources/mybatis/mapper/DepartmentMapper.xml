@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="leslie.information_system.mapper.DepartmentMapper">
+    <select id="getDepartmentByDepartment_id" parameterType="Integer" resultType="leslie.information_system.entity.Department">
+        select * from departments where department_id = #{department_id}
+    </select>
+
+    <select id="getAllDepartment" resultType="leslie.information_system.entity.Department">
+        select * from departments
+    </select>
+
+    <select id="getDepartmentByDepartment_name" resultType="leslie.information_system.entity.Department" parameterType="String">
+        select * from departments where department_name = #{department_name}
+    </select>
+
+    <insert id="addDepartment" parameterType="leslie.information_system.entity.Department">
+        insert into departments (department_name) values (#{department_name})
+    </insert>
+
+    <delete id="deleteDepartment" parameterType="Integer">
+        delete from departments where department_id = #{department_id}
+    </delete>
+
+</mapper>

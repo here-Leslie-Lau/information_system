@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="leslie.information_system.mapper.StudentMapper">
+
+    <resultMap id="studentMapper" type="leslie.information_system.entity.Student">
+        <id property="student_id" column="student_id"></id>
+        <result property="student_username" column="student_username"></result>
+        <result property="student_password" column="student_password"></result>
+        <result property="student_email" column="student_email"></result>
+        <result property="student_phone" column="student_phone"></result>
+        <result property="student_address" column="student_address"></result>
+        <result property="isActive" column="isActive"></result>
+
+        <association property="department" column="department_id" javaType="leslie.information_system.entity.Department" select="leslie.information_system.mapper.DepartmentMapper.getDepartmentByDepartment_id"></association>
+    </resultMap>
+
+    <select id="getStudentByStudent_username" parameterType="String" resultMap="studentMapper">
+        select * from students where student_username = #{student_username}
+    </select>
+
+    <insert id="addStudent" parameterType="leslie.information_system.entity.Student" useGeneratedKeys="true" keyProperty="student_id">
+        insert into students (student_username,student_password,student_email) values (#{student_username},#{student_password},#{student_email})
+    </insert>
+
+    <select id="getStudentByStudent_id" parameterType="Integer" resultMap="studentMapper">
+        select * from students where student_id = #{student_id}
+    </select>
+
+    <select id="getStudentByDepartment_id" parameterType="Integer" resultMap="studentMapper">
+        select * from students where department_id = #{department_id}
+    </select>
+
+    <update id="changeActiveStatus" parameterType="Integer">
+        update students set isActive = 1 where student_id = #{student_id}
+    </update>
+
+    <update id="updateStudent" useGeneratedKeys="true" keyProperty="student_id">
+        update students set student_username = #{student_username},student_password = #{student_password},student_name = #{student_name},student_email = #{student_email},student_phone = #{student_phone},student_address = #{student_address},department_id = #{department.department_id} where student_id = #{student_id}
+    </update>
+
+    <delete id="deleteStudent" parameterType="Integer">
+        delete from students where student_id = #{student_id}
+    </delete>
+</mapper>

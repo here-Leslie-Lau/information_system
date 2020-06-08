@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>学生信息查看与管理系统</title>
+
+    <!-- Bootstrap -->
+    <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+
+    <script>
+//<!--        在页面加载时,请求该接口,获取所有系-->
+        $(function () {
+            $('#department').load("/department/get?htmlName=studentPages/changeInformation");
+        })
+
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+
+    </script>
+</head>
+<body>
+<!--引入导航条-->
+<div th:replace="~{index::nav}"></div>
+
+<!--表单-->
+<form class="form-horizontal" th:method="post" th:action="@{/student/update}">
+    <input type="hidden" name="_method" value="put" />
+    <input type="hidden" th:name="student_id" th:value="${session.student.student_id}"/>
+    <input type="hidden" th:name="student_username" th:value="${session.student.student_username}"/>
+    <input type="hidden" th:name="student_password" th:value="${session.student.student_password}"/>
+    <input type="hidden" th:name="student_email" th:value="${session.student.student_email}"/>
+    <input type="hidden" th:name="department_id" th:if="${session.student.department.department_id} ne 0" th:value="${session.student.department.department_id}"/>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">邮箱</label>
+        <div class="col-sm-10">
+            <p class="form-control-static" th:name="student_email" th:value="${session.student.student_email}" th:text="${session.student.student_email}"></p>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">用户名</label>
+        <div class="col-sm-10">
+            <p class="form-control-static" th:name="student_username" th:value="${session.student.student_username}" th:text="${session.student.student_username}"></p>
+
+        </div>
+<!--        <input th:align="center" class="form-control" id="disabledInput" type="text" th:name="student_username" th:value="${session.student.student_username}"  th:placeholder="${session.student.student_username}" disabled>-->
+
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">密码</label>
+        <div class="col-sm-10">
+            <p class="form-control-static" th:name="student_password" th:value="${session.student.student_password}" th:text="${session.student.student_password}"></p>
+
+        </div>
+    </div>
+
+<!--下拉表单-->
+    <!--    判断,是否修改多次-->
+
+    <div class="form-group" th:if="${session.student.department.department_id} eq 0">
+        <label for="department" class="col-sm-2 control-label">所属系</label>
+        <div id="department" th:fragment="department">
+            <select th:name="department_id">
+                <option th:selected="${session.student.department.department_id eq department1.department_id}" th:each="department1:${allDepartment}" th:value="${department1['department_id']}" th:text="${department1['department_name']}"></option>
+            </select>
+        </div>
+
+        <button type="button" class="btn btn-default" data-toggle="popover" title="填错系的话" data-content="如果你填错系，该账号基本作废，需要重新更换账号，或者联系数据管理员进行手动修改（因为系信息直接和所学科目挂钩）">注意，只能修改一次</button>
+    </div>
+
+<!--    已经修改-->
+    <div class="form-group" th:if="${session.student.department.department_id} ne 0">
+        <label class="col-sm-2 control-label">所属系</label>
+        <div class="col-sm-10">
+            <p class="form-control-static" th:name="department_id" th:value="${session.student.department.department_id}" th:text="${session.student.department.department_name}"></p>
+
+        </div>
+        <!--        <input th:align="center" class="form-control" id="disabledInput" type="text" th:name="student_username" th:value="${session.student.student_username}"  th:placeholder="${session.student.student_username}" disabled>-->
+
+    </div>
+
+<!--    手动分隔符-->
+
+    <div class="form-group">
+        <label for="inputPhone" class="col-sm-2 control-label">手机号码</label>
+        <div class="col-sm-10">
+            <input type="number" th:value="${session.student.student_phone}" th:name="student_phone" class="form-control" id="inputPhone" placeholder="手机号码">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputName" class="col-sm-2 control-label">真实姓名</label>
+        <div class="col-sm-10">
+            <input type="text" th:name="student_name" th:value="${session.student.student_name}" class="form-control" id="inputName" placeholder="真实姓名">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputAddress" class="col-sm-2 control-label">居住地址</label>
+        <div class="col-sm-10">
+            <input type="text" th:name="student_address" th:value="${session.student.student_address}" class="form-control" id="inputAddress" placeholder="居住地址">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">提交</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>

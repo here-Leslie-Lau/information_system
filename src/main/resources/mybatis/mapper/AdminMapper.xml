@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="leslie.information_system.mapper.AdminMapper">
+    <select id="getAdminByAdmin_username" parameterType="String" resultType="leslie.information_system.entity.Admin">
+        select * from admins where admin_username = #{admin_username}
+    </select>
+
+    <select id="getAdminByAdmin_id" parameterType="Integer" resultType="leslie.information_system.entity.Admin">
+        select * from admins where admin_id = #{admin_id};
+    </select>
+</mapper>

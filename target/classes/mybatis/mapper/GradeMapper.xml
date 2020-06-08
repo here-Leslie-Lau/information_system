@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="leslie.information_system.mapper.GradeMapper">
+
+    <resultMap id="gradeMapper" type="leslie.information_system.entity.Grade">
+        <id property="grade_id" column="grade_id"></id>
+        <result property="term" column="term"></result>
+        <result property="score" column="score"></result>
+
+<!--        封装subject-->
+        <association property="subject" column="subject_id" javaType="leslie.information_system.entity.Subject" select="leslie.information_system.mapper.SubjectMapper.getSubjectBySubject_id">
+        </association>
+
+<!--         封装student-->
+        <association property="student" column="student_id" javaType="leslie.information_system.entity.Student" select="leslie.information_system.mapper.StudentMapper.getStudentByStudent_id">
+        </association>
+    </resultMap>
+
+    <select id="getGradeByGrade_id" resultMap="gradeMapper" parameterType="Integer">
+        select * from grades where grade_id = #{grade_id}
+    </select>
+
+    <select id="getGradeBy_student_id" resultMap="gradeMapper" parameterType="Integer">
+        select * from grades where student_id = #{student_id}
+    </select>
+
+    <select id="getGradeBy_Subject_id" resultMap="gradeMapper" parameterType="Integer">
+        select * from grades where subject_id = #{subject_id}
+    </select>
+
+    <update id="updateGrade" parameterType="leslie.information_system.entity.Grade" useGeneratedKeys="true" keyProperty="grade_id">
+        update grades set score = #{score},term = #{term} where grade_id = #{grade_id}
+    </update>
+
+    <delete id="deleteGrade" parameterType="Integer">
+        delete from grades where grade_id = #{grade_id}
+    </delete>
+
+    <insert id="addGrade" parameterType="leslie.information_system.entity.Grade" useGeneratedKeys="true" keyProperty="grade_id">
+        insert into grades (term,score,student_id,subject_id) values (#{term},#{score},#{student.student_id},#{subject.subject_id})
+    </insert>
+
+    <delete id="deleteGradeByStudent_id" parameterType="Integer">
+        delete from grades where student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteGradeBySubject_id" parameterType="Integer">
+        delete from grades where subject_id = #{subject_id}
+    </delete>
+</mapper>

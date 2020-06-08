@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>超级管理员系统界面</title>
+
+
+    <!-- Bootstrap -->
+    <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        $('#myModal1').modal(show);
+        $('#myModal2').modal(show);
+        $('#myModal3').modal(show);
+
+        function deleteDepartmentAdmin(departmentAdmin_id) {
+            $('#departmentAdminid').val(departmentAdmin_id);
+        }
+
+        function updateDepartmentAdmin(departmentAdmin_id,departmentAdmin_username,departmentAdmin_name,departmentAdmin_password,department_name) {
+            $('#departmentAdmin_id').val(departmentAdmin_id);
+            $('#departmentAdmin_username').val(departmentAdmin_username);
+            $('#departmentAdmin_name').val(departmentAdmin_name);
+            $('#departmentAdmin_password').val(departmentAdmin_password);
+            $('#departmentAdmin_department').text(department_name);
+        }
+    </script>
+
+</head>
+<body>
+<!--引入导航条-->
+<div th:replace="~{adminPages/index::nav}"></div>
+
+<!--表格-->
+<table class="table table-hover">
+    <thead>
+    <th>系管理员姓名</th>
+    <th>所管理系</th>
+    <th>用户名</th>
+    <th>密码</th>
+    <th>操作</th>
+    </thead>
+
+    <tr th:each="departmentAdmin:${departmentAdminList}">
+        <td th:text="${departmentAdmin.departmentAdmin_name}"></td>
+        <td th:text="${departmentAdmin.department.department_name}"></td>
+        <td th:text="${departmentAdmin.departmentAdmin_username}"></td>
+        <td th:text="${departmentAdmin.departmentAdmin_password}"></td>
+        <td><button type="button" class="btn btn-info btn-round btn-xs" data-toggle="modal" data-target="#myModal1" th:onclick="updateDepartmentAdmin([[${departmentAdmin.departmentAdmin_id}]],[[${departmentAdmin.departmentAdmin_username}]],[[${departmentAdmin.departmentAdmin_name}]],[[${departmentAdmin.departmentAdmin_password}]],[[${departmentAdmin.department.department_name}]])">
+                          <i class="glyphicon"></i>修改 </button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="deletebutton" class="btn btn-danger btn-round btn-xs" data-toggle="modal" data-target="#myModal3" th:onclick="'javascript:deleteDepartmentAdmin(\''+${departmentAdmin.departmentAdmin_id}+'\');'">删除</button></td>
+    </tr>
+
+
+    <!--详情按钮的弹出框 -->
+      <div class="modal fade" id="myModal1">
+                  <div class="modal-dialog">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">编辑该学生成绩信息</h4>
+                  </div>
+                  <div class="modal-body">
+
+    <form class="form-horizontal" th:method="post" th:action="@{/departmentAdmin/update}">
+        <input type="hidden" name="_method" value="put" />
+        <input type="hidden" name="departmentAdmin_id" value="" id="departmentAdmin_id"/>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">所管理系</label>
+            <div class="col-sm-10">
+                <p class="form-control-static" id="departmentAdmin_department" text="" ></p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="departmentAdmin_username" class="col-sm-2 control-label">用户名</label>
+            <div class="col-sm-10">
+                <input type="text" name="departmentAdmin_username"  value=""  class="form-control" id="departmentAdmin_username">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="departmentAdmin_name" class="col-sm-2 control-label">真实姓名</label>
+            <div class="col-sm-10">
+                <input type="text" name="departmentAdmin_name"  value=""  class="form-control" id="departmentAdmin_name">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="departmentAdmin_password" class="col-sm-2 control-label">密码</label>
+            <div class="col-sm-10">
+                <input type="password" name="departmentAdmin_password"  value=""  class="form-control" id="departmentAdmin_password">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">修改</button>
+            </div>
+        </div>
+
+    </form>
+                  </div>
+                  </div>
+                  </div>
+      </div>
+
+    <!--确定删除的弹出框-->
+      <div class="modal fade" id="myModal3">
+                  <div class="modal-dialog">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">是否删除该系管理员</h4>
+                  </div>
+                  <div class="modal-body">
+    <form th:method="post" th:action="@{/departmentAdmin/delete}">
+        <input type="hidden" name="_method" value="delete" />
+        <input type="hidden" name="departmentAdmin_id" id="departmentAdminid" value=""/>
+        <input type="submit" value="是"/>
+    </form>
+                  </div>
+                  </div>
+                  </div>
+      </div>
+
+</table>
+
+<hr/>
+<p>
+    <button type="button" class="btn btn-primary btn-xs"  data-toggle="modal" data-target="#myModal2">添加系管理员</button>
+</p>
+
+<!--添加管理员的弹出框 -->
+  <div class="modal fade" id="myModal2">
+                  <div class="modal-dialog">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">添加该学生成绩信息</h4>
+                  </div>
+                  <div class="modal-body">
+    <form class="form-horizontal" th:method="post" th:action="@{/departmentAdmin/add}">
+
+        <div class="form-group">
+            <label for="inputname" class="col-sm-2 control-label">系管理员姓名</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputname" th:name="departmentAdmin_name">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">所管理系</label>
+            <div class="col-sm-10">
+                <select th:name="department_id">
+                    <option th:each="department:${departmentList}" th:value="${department.department_id}" th:text="${department.department_name}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputusername" class="col-sm-2 control-label">用户名</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputusername" th:name="departmentAdmin_username">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputpassword" class="col-sm-2 control-label">密码</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" id="inputpassword" th:name="departmentAdmin_password">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">添加</button>
+            </div>
+        </div>
+
+    </form>
+                  </div>
+                  </div>
+                  </div>
+      </div>
+
+</body>
+</html>

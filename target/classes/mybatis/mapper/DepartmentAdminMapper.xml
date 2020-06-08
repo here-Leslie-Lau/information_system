@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="leslie.information_system.mapper.DepartmentAdminMapper">
+
+    <resultMap id="departmentAdminMapper" type="leslie.information_system.entity.DepartmentAdmin">
+        <id property="departmentAdmin_id" column="departmentAdmin_id"></id>
+        <result property="departmentAdmin_username" column="departmentAdmin_username"></result>
+        <result property="departmentAdmin_password" column="departmentAdmin_password"></result>
+        <result property="departmentAdmin_name" column="departmentAdmin_name"></result>
+
+        <association property="department" column="department_id" javaType="leslie.information_system.entity.Department" select="leslie.information_system.mapper.DepartmentMapper.getDepartmentByDepartment_id">
+        </association>
+    </resultMap>
+
+    <select id="getDepartmentAdminByDepartmentAdmin_username" parameterType="String" resultMap="departmentAdminMapper">
+        select * from departmentAdmins where departmentAdmin_username = #{departmentAdmin_username}
+    </select>
+
+    <select id="getDepartmentAdminByDepartmentAdmin_id" parameterType="Integer" resultMap="departmentAdminMapper">
+        select * from departmentAdmins where departmentAdmin_id = #{departmentAdmin_id}
+    </select>
+
+    <insert id="addDepartmentAdmin" parameterType="leslie.information_system.entity.DepartmentAdmin" useGeneratedKeys="true" keyProperty="departmentAdmin_id">
+        insert into departmentAdmins (departmentAdmin_username,departmentAdmin_password,departmentAdmin_name,department_id) values (#{departmentAdmin_username},#{departmentAdmin_password},#{departmentAdmin_name},#{department.department_id})
+    </insert>
+
+    <delete id="deleteDepartmentAdmin" parameterType="Integer">
+        delete from departmentAdmins where departmentAdmin_id = #{departmentAdmin_id}
+    </delete>
+
+    <select id="getAllDepartmentAdmin" parameterType="leslie.information_system.entity.DepartmentAdmin" resultMap="departmentAdminMapper">
+        select * from departmentAdmins
+    </select>
+
+    <update id="updateDepartmentAdmin" parameterType="leslie.information_system.entity.DepartmentAdmin" useGeneratedKeys="true" keyProperty="departmentAdmin_id">
+        update departmentAdmins set departmentAdmin_username = #{departmentAdmin_username},departmentAdmin_password = #{departmentAdmin_password},departmentAdmin_name = #{departmentAdmin_name} where departmentAdmin_id = #{departmentAdmin_id}
+    </update>
+
+    <select id="getDepartmentAdminByDepartment_id" parameterType="Integer" resultMap="departmentAdminMapper">
+        select * from departmentAdmins where department_id = #{department_id};
+    </select>
+</mapper>

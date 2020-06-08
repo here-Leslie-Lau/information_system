@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+
+        $(function () {
+            $('#department').load("/department/get");
+        })
+    </script>
+
+</head>
+<body>
+<form>
+<!--    <input type="checkbox" th:each="department:${allDepartment}" th:value="${department['department_id']}" th:text="${department['department_name']}"/><br/>-->
+    <div id="department" th:fragment="department">
+    <select>
+        <option th:each="department:${allDepartment}" th:value="${department['department_id']}" th:text="${department['department_name']}"></option>
+    </select>
+    </div>
+</form>
+
+</body>
+</html>
