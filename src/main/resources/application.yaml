@@ -22,3 +22,7 @@ spring:
 mybatis:
   config-location: classpath:mybatis/sqlmapper.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
+
+logging:
+  level:
+    leslie.information_system.mapper: debug
