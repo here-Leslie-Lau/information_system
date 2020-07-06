@@ -15,6 +15,10 @@ spring:
         enabled: true
   messages:
     basename: i18n.studentlogin
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123
 mybatis:
   config-location: classpath:mybatis/sqlmapper.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
